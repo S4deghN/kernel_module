@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# qemu-system-x86_64 -M pc -m 2048M -kernel linux-5.4.281/arch/x86_64/boot/bzImage -initrd rootfs.cpio.gz
+qemu-system-x86_64 -M pc -m 2048M -kernel linux-5.4.281/arch/x86_64/boot/bzImage -initrd rootfs.cpio.gz -append "root=/dev/mem console=ttyS0" -nographic

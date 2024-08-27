@@ -1,3 +1,6 @@
+rootfs/
+build/
+.cache
 *.zip
 *.xz
 *.gz
