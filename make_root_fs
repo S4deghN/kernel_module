@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -x
+
+mkdir -p rootfs/{bin,sbin,etc,proc,sys,var,usr/{bin,sbin}}
+
+cp -a busybox-1_36_0/_install/* rootfs/
+
+cd rootfs
+ln -sf bin/busybox init
+mkdir dev
+sudo mknod -m 660 dev/mem c 1 1
+sudo mknod -m 660 dev/tty2 c 4 2
+sudo mknod -m 660 dev/tty3 c 4 3
+sudo mknod -m 660 dev/tty4 c 4 4
+find . -print0 | cpio --null -o --format=newc | gzip -9 > ../rootfs.cpio.gz
