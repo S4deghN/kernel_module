@@ -4,6 +4,10 @@
 #include <linux/module.h>	/* Needed by all modules */
 #include <linux/kernel.h>	/* Needed for KERN_INFO */
 #include <linux/init.h>		/* Needed for the macros */
+#include <linux/if.h>
+#include <linux/if_tun.h>
+#include <linux/ioctl.h>
+
 #define DRIVER_AUTHOR "Peter Jay Salzman <p@dirac.org>"
 #define DRIVER_DESC   "A sample driver"
 

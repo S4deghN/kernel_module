@@ -1,30 +1,40 @@
 #!/bin/bash
 
-set -xe
+set +x
+set -e
+
+echo "Building rootfs"
 
 [[ -d rootfs ]] && rm -rf rootfs
 
-mkdir -p rootfs/{bin,sbin,etc,proc,sys,var,proc,lib/modules,usr/{bin,sbin}}
-touch rootfs/proc/modules
+mkdir rootfs && cd rootfs
 
-cp -a busybox-1_36_0/_install/* rootfs/
+mkdir bin sbin lib etc sys var proc dev usr modules
+mkdir -p usr/{bin,sbin}
+mkdir -p etc/init.d
+mkdir -p dev/net
 
-cd rootfs
-
+cp -a ../busybox-1_36_0/_install/* ./
 ln -sf bin/busybox init
 
-mkdir -p etc/init.d
-echo '#!/bin/sh' > etc/init.d/rcS
+cat > etc/init.d/rcS << EOF
+#!/bin/sh
+mount -a
+EOF
 chmod +x etc/init.d/rcS
 
-echo -e 'proc\t /proc\t proc\t defaults\t 0 1' > etc/fstab
-echo 'mount -a' >> etc/init.d/rcS
+cat > etc/fstab << EOF
+proc	/proc	proc	defaults	0 1
+EOF
 
-mkdir dev
 sudo mknod -m 660 dev/mem c 1 1
 sudo mknod -m 660 dev/tty1 c 4 1
 sudo mknod -m 660 dev/tty2 c 4 2
 sudo mknod -m 660 dev/tty3 c 4 3
 sudo mknod -m 660 dev/tty4 c 4 4
+sudo mknod -m 660 dev/net/tun c 10 200
+
+cp ../module/build/*.ko modules || echo "continuing!";
+cp -r ../linux-5.4.281/lib/modules lib || echo "continuing!";
 
 find . -print0 | cpio --null -o --format=newc | gzip -9 > ../rootfs.cpio.gz

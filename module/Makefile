@@ -1,14 +1,15 @@
-export CROSS_COMPILE ?= x86_64-linux-gnu-
+# export CROSS_COMPILE ?= x86_64-linux-gnu-
 
 obj-m += hello_world.o
 hello_world-y := src/main.o
 
 KDIR := ../linux-5.4.281/
 
-BUILD_DIR := $(PWD)/build
+MAKE_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+BUILD_DIR := $(MAKE_DIR)/build
 BUILD_DIR_MAKEFILE := $(BUILD_DIR)/Makefile
 
-BUILD := make -C $(KDIR) M=$(BUILD_DIR) src=$(PWD)
+BUILD := make -C $(KDIR) M=$(BUILD_DIR) src=$(MAKE_DIR)
 
 default: $(BUILD_DIR_MAKEFILE)
 	$(BUILD) modules

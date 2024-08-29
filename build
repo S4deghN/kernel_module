@@ -1,0 +1,9 @@
+#!/bin/sh
+
+export INSTALL_MOD_PATH=./
+make -C linux-5.4.281/ -j8
+make -C linux-5.4.281/ modules_install -j8
+make -C module/ -j8
+
+./make_root_fs
+
