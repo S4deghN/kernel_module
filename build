@@ -6,4 +6,3 @@ make -C linux-5.4.281/ modules_install -j8
 make -C module/ -j8
 
 ./make_root_fs
-
