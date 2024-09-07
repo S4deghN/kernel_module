@@ -10,7 +10,7 @@ echo "Building rootfs"
 mkdir rootfs && cd rootfs
 
 mkdir bin sbin lib etc sys var proc dev usr modules
-mkdir -p usr/{bin,sbin}
+mkdir -p usr/{bin,sbin,lib}
 mkdir -p etc/init.d
 mkdir -p dev/net
 
@@ -36,5 +36,8 @@ sudo mknod -m 660 dev/net/tun c 10 200
 
 cp ../module/build/*.ko modules || echo "continuing!";
 cp -r ../linux-5.4.281/lib/modules lib || echo "continuing!";
+cp ../user/tun_reader bin || echo "continuing!";
+cp ../user/tap_reader bin || echo "continuing!";
+cp /sbin/ldd sbin
 
 find . -print0 | cpio --null -o --format=newc | gzip -9 > ../rootfs.cpio.gz

@@ -3,6 +3,8 @@
 obj-m += hello_world.o
 hello_world-y := src/main.o
 
+ccflags-y := -Wno-declaration-after-statement
+
 KDIR := ../linux-5.4.281/
 
 MAKE_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
