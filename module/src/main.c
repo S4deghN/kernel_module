@@ -45,6 +45,10 @@ static int __init init_hello_4(void)
         printk(KERN_INFO "Nice!: %lx\n", (long)socket);
     }
 
+    sock_recvmsg(0, 0, 0);
+
+    file->f_op->read(
+
     // bool need_copy = false;
     // int res = dev_ioctl(sock_net(socket->sk), TUNSETIFF, &ifr, &need_copy);
     // if (res != 0) {

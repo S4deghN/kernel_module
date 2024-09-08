@@ -13,6 +13,8 @@
 
 #include <sys/ioctl.h>
 
+#include <cycle.h>
+
 #define BUFFLEN (4 * 1024)
 
 const char HEX[] = {
@@ -126,6 +128,8 @@ void dump_packet(int count, char* buffer)
 
 int main(int argc, char** argv)
 {
+    ticks t0 = getticks();
+
     if (argc != 2) {
         printf("no dev name!\n");
         return 1;
@@ -143,15 +147,19 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    // struct ifreq ifr;
-    // memset(&ifr, 0, sizeof(ifr));
-    // ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
-    // strncpy(ifr.ifr_name, device_name, IFNAMSIZ);
-    // int res = ioctl(fd, TUNSETIFF, &ifr);
-    // if (res == -1) {
-    //     printf("res == -1!\n");
-    //     return 1;
-    // }
+    struct ifreq ifr;
+    memset(&ifr, 0, sizeof(ifr));
+    ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
+    strncpy(ifr.ifr_name, device_name, IFNAMSIZ);
+    int res = ioctl(fd, TUNSETIFF, &ifr);
+    if (res == -1) {
+        printf("res == -1!\n");
+        return 1;
+    }
+
+    ticks t1 = getticks();
+
+    printf("elapsed: %f\n", elapsed(t1, t0));
 
     // res = ioctl(fd, TUNSETGROUP, "s4");
     // if (res == -1) {
@@ -170,7 +178,6 @@ int main(int argc, char** argv)
     //     dump_packet(count, buffer);
     // }
 
-    while (1);
 
     return 0;
 }
