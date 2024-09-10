@@ -1,6 +1,3 @@
-/*
- *  hello-4.c - Demonstrates module documentation.
- */
 #include <linux/module.h>	/* Needed by all modules */
 #include <linux/kernel.h>	/* Needed for KERN_INFO */
 #include <linux/init.h>		/* Needed for the macros */
@@ -13,10 +10,10 @@
 #include <linux/netdevice.h>
 #include <net/sock.h>
 
-#define DRIVER_AUTHOR "Peter Jay Salzman <p@dirac.org>"
+#define DRIVER_AUTHOR "The Dude"
 #define DRIVER_DESC   "A sample driver"
 
-static int __init init_hello_4(void)
+static int __init init_hello(void)
 {
     printk(KERN_INFO "Hello, world!\n");
 
@@ -27,7 +24,7 @@ static int __init init_hello_4(void)
     ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
     strncpy(ifr.ifr_name, "tun0", 4);
 
-    // Disable argument validity checking since we are passing ioctl args alcolated in kernel
+    // Disable memory address validity checking since we are passing ioctl, args alcolated in kernel
     // address space.
     mm_segment_t fs;
     fs = get_fs();
@@ -45,45 +42,20 @@ static int __init init_hello_4(void)
         printk(KERN_INFO "Nice!: %lx\n", (long)socket);
     }
 
-    sock_recvmsg(0, 0, 0);
-
-    file->f_op->read(
-
-    // bool need_copy = false;
-    // int res = dev_ioctl(sock_net(socket->sk), TUNSETIFF, &ifr, &need_copy);
-    // if (res != 0) {
-    //     printk(KERN_INFO "Shit!: %d\n", res);
-    // }
-
     return 0;
 }
 
-static void __exit cleanup_hello_4(void)
+static void __exit cleanup_hello(void)
 {
-    printk(KERN_INFO "Goodbye, world 4\n");
+    printk(KERN_INFO "Goodbye, world\n");
 }
 
-module_init(init_hello_4);
-module_exit(cleanup_hello_4);
-
-/*
- *  You can use strings, like this:
- */
+module_init(init_hello);
+module_exit(cleanup_hello);
 
 /*
  * Get rid of taint message by declaring code as GPL.
  */
 MODULE_LICENSE("GPL");
-
-/*
- * Or with defines, like this:
- */
 MODULE_AUTHOR(DRIVER_AUTHOR);	/* Who wrote this module? */
 MODULE_DESCRIPTION(DRIVER_DESC);	/* What does this module do */
-
-/*
- *  This module uses /dev/testdevice.  The MODULE_SUPPORTED_DEVICE macro might
- *  be used in the future to help automatic configuration of modules, but is
- *  currently unused other than for documentation purposes.
- */
-// MODULE_SUPPORTED_DEVICE("testdevice");
